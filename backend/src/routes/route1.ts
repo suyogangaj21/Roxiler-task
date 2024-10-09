@@ -10,7 +10,7 @@ import { combined } from "../controller/Task_06";
 const router =Router();
 
 router.route("/create").post(Create);
-router.route("/read").get(Read);
+router.route("/read/:month").get(Read);
 
 router.route("/statistics/:month").get(statistics);
 router.route("/bar-graph/:month").get(barChart);
