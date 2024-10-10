@@ -8,13 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
@@ -38,13 +32,16 @@ export interface transactions {
     totalRecords: number;
   };
 }
+interface TableDataProps {
+  month: string;
+}
 
-export function TableData() {
+const TableData:React.FC<TableDataProps>=({month})=> {
   const [data, setData] = useState<transactions | null>(null);
   
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
-  const [month, setMonth] = useState<string>("March");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,7 +53,7 @@ export function TableData() {
           params: {
             page: page,
             search: search,
-            perPage: 10,
+            perPage: 5,
           },
         });
         console.log(res.data);
@@ -68,37 +65,13 @@ export function TableData() {
     fetchData();
   }, [search, page, month]);
 
-  const months = [
-    { value: "01", label: "January" },
-    { value: "02", label: "February" },
-    { value: "03", label: "March" },
-    { value: "04", label: "April" },
-    { value: "05", label: "May" },
-    { value: "06", label: "June" },
-    { value: "07", label: "July" },
-    { value: "08", label: "August" },
-    { value: "09", label: "September" },
-    { value: "10", label: "October" },
-    { value: "11", label: "November" },
-    { value: "12", label: "December" },
-  ];
-
+ 
   return (
     <div className="p-1 ">
       <div className="flex gap-4 justify-between">
+        <h2>Transaction DashBoard</h2>
         <div className="flex gap-4">
-          <Select onValueChange={(e) => setMonth(e)} defaultValue="March">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Month" />
-            </SelectTrigger>
-            <SelectContent>
-              {months.map((month) => (
-                <SelectItem key={month.value} value={month.label}>
-                  {month.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        
         
         <div>
         <Input
@@ -119,24 +92,25 @@ export function TableData() {
         <TableCaption>A list of transactions</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>No</TableHead>
-            <TableHead className="w-[100px]">Category</TableHead>
-            <TableHead>title</TableHead>
-            <TableHead>description</TableHead>
-            <TableHead>sold</TableHead>
-            <TableHead className="text-right">Price</TableHead>
+            <TableHead>id</TableHead>
+            <TableHead className="w-[100px]">Title</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Sold</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data &&
             data.transactions.map((item, index) => (
               <TableRow key={item.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell className="font-medium">{item.category}</TableCell>
-                <TableCell>{item.title}</TableCell>
+                <TableCell>{item.id}</TableCell>
+                <TableCell className="font-medium">{item.title}</TableCell>
                 <TableCell>{item.description}</TableCell>
+                <TableCell>{item.price}</TableCell>
+                <TableCell className="text-right">{item.category}</TableCell>
                 <TableCell>{item.sold ? "Yes" : "No"}</TableCell>
-                <TableCell className="text-right">{item.price}</TableCell>
+    
               </TableRow>
             ))}
         </TableBody>
@@ -150,3 +124,4 @@ export function TableData() {
     </div>
   );
 }
+export default TableData
