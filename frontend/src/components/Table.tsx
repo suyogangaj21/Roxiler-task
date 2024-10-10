@@ -102,7 +102,7 @@ const TableData:React.FC<TableDataProps>=({month})=> {
         </TableHeader>
         <TableBody>
           {data &&
-            data.transactions.map((item, index) => (
+            data.transactions.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.id}</TableCell>
                 <TableCell className="font-medium">{item.title}</TableCell>
